@@ -1,2 +1,2 @@
 google.generativeai
-speech_recognition
+SpeechRecognition
