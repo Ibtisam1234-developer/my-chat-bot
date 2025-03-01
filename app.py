@@ -1,7 +1,6 @@
 import google.generativeai as generativeai
 import streamlit as st
 import base64
-import speech_recognition as sr
 
 # Configure the API key
 generativeai.configure(api_key='AIzaSyB-ozmy3iQAWbD-htE3ojrVb9avVrDWGLw')
@@ -27,26 +26,6 @@ set_background("image.png")
 # Initialize model
 model = generativeai.GenerativeModel('gemini-1.5-flash')
 
-# Function to capture voice input
-def take_command() -> str:
-    """Listen for audio input and convert to text."""
-    recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("🎙️ Listening...")
-        recognizer.pause_threshold = 1
-        audio = recognizer.listen(source)
-
-        try:
-            st.info("🧠 Recognizing...")
-            query = recognizer.recognize_google(audio, language='en-in')
-            return query
-        except sr.UnknownValueError:
-            return "Could not understand, please try again."
-        except sr.RequestError:
-            return "Speech recognition service error."
-        except Exception:
-            return "An error occurred during speech recognition."
-
 def main():
     st.title('Chat with Ibtisam AI')
 
@@ -58,17 +37,8 @@ def main():
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # User input handling
-    prompt = None
-
-    # Voice input button
-    if st.button("🎤 Speak"):
-        prompt = take_command()
-        st.success(f"Recognized: {prompt}")  # Display recognized text
-
     # Text input box
-    if not prompt:
-        prompt = st.chat_input("What would you like to ask?")
+    prompt = st.chat_input("What would you like to ask?")
 
     # Process input if available
     if prompt:
